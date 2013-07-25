@@ -53,16 +53,6 @@ for s = 1:numel(param.domains)
             tstart = tic;
             [model, W] = TrainMmdt(labels.train, data.train, param);
             telapsed(i) = toc(tstart);
-            %}
-            %{
-            data_svm = [data.train.source; data.train.target];
-            labels_svm = [labels.train.source, labels.train.target];
-
-            weights_s = param.C_s * ones(length(labels.train.source), 1);
-            weights_t = param.C_t * ones(length(labels.train.target), 1);
-            weights = [weights_s; weights_t];
-            model = train(weights, labels_svm', sparse([data_svm, ones(size(data_svm,1),1)]), '-c 1 -q');
-            %}
             [pl, acc] = predict(labels.test.target', ...
                 [sparse(data.test.target), ones(length(labels.test.target),1)], ...
                 model);
